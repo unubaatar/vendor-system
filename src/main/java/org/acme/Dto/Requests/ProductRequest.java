@@ -1,0 +1,52 @@
+package org.acme.Dto.Requests;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+public class ProductRequest {
+
+    @NotBlank(message = "Product name is required")
+    private String name;
+
+    @NotBlank(message = "Description is required")
+    private String description;
+
+    private String image;
+
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be positive")
+    private Integer price;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+}
