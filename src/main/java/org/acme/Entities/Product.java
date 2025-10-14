@@ -31,6 +31,9 @@ public class Product extends PanacheEntityBase {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name="is_active")
+    private Boolean isActive = true;
+
     public UUID getId() {
         return id;
     }
@@ -97,5 +100,21 @@ public class Product extends PanacheEntityBase {
 
     public void setUpdated_at(LocalDateTime updated_at) {
         this.updatedAt = updated_at;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

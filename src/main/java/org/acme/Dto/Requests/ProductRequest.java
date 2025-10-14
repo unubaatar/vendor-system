@@ -18,6 +18,8 @@ public class ProductRequest {
     @Positive(message = "Price must be positive")
     private Integer price;
 
+    private Boolean isActive;
+
     public String getName() {
         return name;
     }
@@ -48,5 +50,13 @@ public class ProductRequest {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

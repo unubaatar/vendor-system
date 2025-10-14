@@ -9,7 +9,7 @@ import org.acme.Services.impl.ProductServiceImpl;
 
 import java.util.UUID;
 
-@Path("/products")
+@Path("/product")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProductResource {
@@ -17,8 +17,11 @@ public class ProductResource {
     ProductServiceImpl productService;
 
     @GET
-    public Response list() {
-        return productService.list();
+    public Response list(
+            @QueryParam("name") String name,
+            @QueryParam("isActive") Boolean isActive
+    ) {
+        return productService.list(name, isActive);
     }
 
     @GET

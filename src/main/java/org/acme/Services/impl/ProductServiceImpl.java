@@ -1,26 +1,47 @@
 package org.acme.Services.impl;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 import org.acme.Dto.Requests.ProductRequest;
 import org.acme.Dto.Responses.ProductResponse;
 import org.acme.Entities.Product;
 import org.acme.Services.ProductService;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ProductServiceImpl implements ProductService {
     @Override
-    public Response list() {
+    public Response list(@QueryParam("name") String name,
+                         @QueryParam("isActive") Boolean isActive) {
         try {
-            List<ProductResponse> productList = Product.listAll().stream()
-                    .map(product  -> new ProductResponse().fromEntity((Product) product))
+            StringBuilder queryStr = new StringBuilder();
+            Map<String, Object> params = new HashMap<>();
+
+            if (name != null && !name.isEmpty()) {
+                queryStr.append("lower(name) like :name");
+                params.put("name", "%" + name.toLowerCase() + "%");
+            }
+
+            if (isActive != null) {
+                if (!queryStr.isEmpty()) queryStr.append(" and ");
+                queryStr.append("isActive = :isActive");
+                params.put("isActive", isActive);
+            }
+
+            String finalQuery = !queryStr.isEmpty() ? queryStr.toString() : "";
+
+            List<ProductResponse> productList = Product.find(finalQuery, params)
+                    .list()
+                    .stream()
+                    .map(p -> new ProductResponse().fromEntity((Product) p))
                     .collect(Collectors.toList());
+
             return Response.ok(productList).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -101,6 +122,10 @@ public class ProductServiceImpl implements ProductService {
         }
         if (productRequest.getPrice() != null) {
             foundProduct.setPrice(productRequest.getPrice());
+        }
+
+        if (productRequest.getActive() != null) {
+            foundProduct.setActive(productRequest.getActive());
         }
         foundProduct.persist();
         return foundProduct;

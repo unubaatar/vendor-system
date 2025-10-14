@@ -11,6 +11,7 @@ public class ProductResponse {
     private String description;
     private String image;
     private Integer price;
+    private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -25,6 +26,7 @@ public class ProductResponse {
         dto.setPrice(product.getPrice());
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdated_at());
+        dto.setActive(product.getActive());
         return dto;
     }
 
@@ -82,5 +84,13 @@ public class ProductResponse {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
