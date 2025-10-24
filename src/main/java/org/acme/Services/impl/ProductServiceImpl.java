@@ -1,11 +1,13 @@
 package org.acme.Services.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 import org.acme.Dto.Requests.ProductRequest;
 import org.acme.Dto.Responses.ProductResponse;
+import org.acme.Entities.Category;
 import org.acme.Entities.Product;
 import org.acme.Services.ProductService;
 
@@ -70,22 +72,31 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public Response create(ProductRequest productRequest) {
         try {
+            Optional<Category> foundCategory = Category.find("id", productRequest.getCategoryId()).firstResultOptional();
+            if (foundCategory.isEmpty()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Category not found with ID: " + productRequest.getCategoryId())
+                        .build();
+            }
             Product product = new Product();
             product.setName(productRequest.getName());
             product.setDescription(productRequest.getDescription());
             product.setImage(productRequest.getImage());
             product.setPrice(productRequest.getPrice());
+            product.setCategory(foundCategory.get());
             product.persist();
             ProductResponse dto = new ProductResponse().fromEntity(product);
             return Response.status(Response.Status.CREATED)
                     .entity(dto)
                     .build();
-        } catch(Exception e) {
+
+        } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error create product: " + e.getMessage())
+                    .entity("Error creating product: " + e.getMessage())
                     .build();
         }
     }
+
 
     @Override
     @Transactional
@@ -124,6 +135,11 @@ public class ProductServiceImpl implements ProductService {
 
         if (productRequest.getActive() != null) {
             foundProduct.setActive(productRequest.getActive());
+        }
+
+        if(productRequest.getCategoryId() != null) {
+            Optional<Category> category = Category.find("id"  , productRequest.getCategoryId()).firstResultOptional();
+            category.ifPresent(foundProduct::setCategory);
         }
         foundProduct.persist();
         return foundProduct;

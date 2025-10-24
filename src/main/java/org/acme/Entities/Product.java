@@ -34,6 +34,10 @@ public class Product extends PanacheEntityBase {
     @Column(name="is_active")
     private Boolean isActive = true;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     public UUID getId() {
         return id;
     }
@@ -116,5 +120,13 @@ public class Product extends PanacheEntityBase {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

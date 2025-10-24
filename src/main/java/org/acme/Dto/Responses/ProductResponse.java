@@ -1,5 +1,6 @@
 package org.acme.Dto.Responses;
 
+import org.acme.Entities.Category;
 import org.acme.Entities.Product;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ public class ProductResponse {
     private String description;
     private String image;
     private Integer price;
+    private Category category;
     private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -27,6 +29,7 @@ public class ProductResponse {
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdated_at());
         dto.setActive(product.getActive());
+        dto.setCategory(product.getCategory());
         return dto;
     }
 
@@ -92,5 +95,13 @@ public class ProductResponse {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

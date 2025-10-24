@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.util.UUID;
+
 public class ProductRequest {
 
     @NotBlank(message = "Product name is required")
@@ -11,6 +13,9 @@ public class ProductRequest {
 
     @NotBlank(message = "Description is required")
     private String description;
+
+    @NotBlank(message = "Category is required")
+    private UUID categoryId;
 
     private String image;
 
@@ -58,5 +63,13 @@ public class ProductRequest {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public UUID getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
     }
 }
