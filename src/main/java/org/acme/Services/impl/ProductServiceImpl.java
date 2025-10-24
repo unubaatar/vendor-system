@@ -1,7 +1,5 @@
 package org.acme.Services.impl;
 
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
-import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.QueryParam;
@@ -100,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
                         .build();
             }
 
-            Product existingProduct = getProduct(productRequest, foundProduct.get());
+            Product existingProduct = createProduct(productRequest, foundProduct.get());
             ProductResponse productResponse = new ProductResponse().fromEntity(existingProduct);
             return Response.ok(productResponse).build();
         } catch(Exception e) {
@@ -110,7 +108,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    private Product getProduct(ProductRequest productRequest, Product foundProduct) {
+    private Product createProduct(ProductRequest productRequest, Product foundProduct) {
         if (productRequest.getName() != null) {
             foundProduct.setName(productRequest.getName());
         }
